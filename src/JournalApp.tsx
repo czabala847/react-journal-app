@@ -1,10 +1,10 @@
 import React from "react";
+import { AppRoutes } from "./router/AppRoutes";
 
 export const JournalApp: React.FC = () => {
   return (
     <>
-      <h1>JournalApp</h1>
-      <hr />
+      <AppRoutes />
     </>
   );
 };

@@ -1,10 +1,10 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Toolbar } from "@mui/material";
 
-import { NavBar } from "../components/NavBar";
+import { NavBar, SideBar } from "../components";
 
 interface Props {
-  children: JSX.Element;
+  children: JSX.Element[];
 }
 
 const drawerWidth: number = 240;
@@ -14,11 +14,10 @@ export const JournalLayout: React.FC<Props> = ({ children }) => {
     <Box sx={{ display: "flex" }}>
       <NavBar drawerWidth={drawerWidth} />
 
-      {/* Sidebar */}
+      <SideBar drawerWidth={drawerWidth} />
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        {/* Toolbar */}
-
+        <Toolbar />
         {children}
       </Box>
     </Box>

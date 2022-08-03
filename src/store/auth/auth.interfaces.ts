@@ -12,3 +12,6 @@ export interface AuthState {
   photoURL: string | null;
   errorMessage: string | null;
 }
+
+export interface AuthGoogle
+  extends Omit<AuthState, "status" | "errorMessage"> {}

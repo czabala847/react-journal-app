@@ -1,6 +1,7 @@
 import { AppDispatch } from "../store";
-import { checkingCredentials } from "./authSlice";
+import { checkingCredentials, logout, login } from "./authSlice";
 import { singInWithGoogle } from "../../firebase/reducers";
+import { AuthGoogle } from "./auth.interfaces";
 
 export const checkingAuthentication = (email: string, password: string) => {
   return async (dispatch: AppDispatch) => {
@@ -13,6 +14,16 @@ export const startGoogleSingIn = () => {
     dispatch(checkingCredentials());
 
     const result = await singInWithGoogle();
-    console.log(result);
+
+    if (!result.ok) return dispatch(logout(result.errorMessage!));
+
+    const authUserGoogle: AuthGoogle = {
+      displayName: result.displayName!,
+      email: result.email!,
+      photoURL: result.photoURL!,
+      uid: result.uid!,
+    };
+
+    dispatch(login(authUserGoogle));
   };
 };

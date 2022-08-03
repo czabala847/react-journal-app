@@ -1,4 +1,6 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useMemo } from "react";
+import { useSelector } from "react-redux";
+
 import { Link as RouterLink } from "react-router-dom";
 
 import { Grid, TextField, Typography, Button, Link } from "@mui/material";
@@ -8,6 +10,7 @@ import { useForm } from "../../hooks";
 import {
   AppDispatch,
   checkingAuthentication,
+  RootState,
   startGoogleSingIn,
   useAppDispatch,
 } from "../../store";
@@ -22,6 +25,8 @@ export const LoginPage: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
+  const { status } = useSelector((state: RootState) => state.auth);
+
   const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(checkingAuthentication(email, password) as AppDispatch);
@@ -30,6 +35,8 @@ export const LoginPage: React.FC = () => {
   const onGoogleSingIn = () => {
     dispatch(startGoogleSingIn() as AppDispatch);
   };
+
+  const isChecking = useMemo(() => status === "Checking", [status]);
 
   return (
     <AuthLayout title="Login">
@@ -61,7 +68,12 @@ export const LoginPage: React.FC = () => {
 
           <Grid container spacing={2} sx={{ mb: 2 }}>
             <Grid item xs={12} md={6}>
-              <Button type="submit" variant="contained" fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={isChecking}
+              >
                 Login
               </Button>
             </Grid>
@@ -72,6 +84,7 @@ export const LoginPage: React.FC = () => {
                 variant="contained"
                 fullWidth
                 onClick={onGoogleSingIn}
+                disabled={isChecking}
               >
                 <Google />
                 <Typography sx={{ ml: 1 }}>Google</Typography>

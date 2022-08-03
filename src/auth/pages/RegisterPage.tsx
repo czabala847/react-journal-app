@@ -1,16 +1,30 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 
 import { Grid, TextField, Typography, Button, Link } from "@mui/material";
-import { Google } from "@mui/icons-material";
 
 import { AuthLayout } from "../layout/AuthLayout";
+import { useForm } from "../../hooks";
+
+const formData = {
+  displayName: "Carlos Zabala",
+  email: "carlos@example.com",
+  password: "12345",
+};
 
 export const RegisterPage: React.FC = () => {
+  const { displayName, email, password, changeValueInput, stateForm } =
+    useForm(formData);
+
+  const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(stateForm);
+  };
+
   return (
     <AuthLayout title="Crear cuenta">
-      <form>
+      <form onSubmit={onSubmit}>
         <Grid container>
           <Grid item xs={12} sx={{ marginBottom: 2 }}>
             <TextField
@@ -18,6 +32,9 @@ export const RegisterPage: React.FC = () => {
               type="text"
               placeholder="Carlos Zabala"
               fullWidth
+              name="displayName"
+              value={displayName}
+              onChange={changeValueInput}
             />
           </Grid>
 
@@ -27,6 +44,9 @@ export const RegisterPage: React.FC = () => {
               type="email"
               placeholder="correo@google.com"
               fullWidth
+              name="email"
+              value={email}
+              onChange={changeValueInput}
             />
           </Grid>
 
@@ -36,12 +56,15 @@ export const RegisterPage: React.FC = () => {
               type="password"
               placeholder="Contraseña"
               fullWidth
+              name="password"
+              value={password}
+              onChange={changeValueInput}
             />
           </Grid>
 
           <Grid container sx={{ mb: 2 }}>
             <Grid item xs={12}>
-              <Button variant="contained" fullWidth>
+              <Button type="submit" variant="contained" fullWidth>
                 Crear cuenta
               </Button>
             </Grid>

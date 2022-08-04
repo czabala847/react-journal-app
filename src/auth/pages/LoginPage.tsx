@@ -18,10 +18,15 @@ import {
 import { AuthLayout } from "../layout/AuthLayout";
 
 export const LoginPage: React.FC = () => {
-  const { email, password, changeValueInput } = useForm({
-    email: "carlos@example.com",
-    password: "123456",
-  });
+  const { changeValueInput, stateForm } = useForm(
+    {
+      email: "carlos@example.com",
+      password: "123456",
+    },
+    {}
+  );
+
+  const { email, password } = stateForm;
 
   const dispatch = useAppDispatch();
 

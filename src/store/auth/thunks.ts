@@ -1,7 +1,11 @@
 import { AppDispatch } from "../store";
+import {
+  registerUserWithEmailPassword,
+  singInWithGoogle,
+} from "../../firebase/providers";
 import { checkingCredentials, logout, login } from "./authSlice";
-import { singInWithGoogle } from "../../firebase/reducers";
-import { AuthGoogle } from "./auth.interfaces";
+import { AuthUser } from "./auth.interfaces";
+import { AuthRegister } from "../../auth/models/Auth.interfaces";
 
 export const checkingAuthentication = (email: string, password: string) => {
   return async (dispatch: AppDispatch) => {
@@ -17,7 +21,7 @@ export const startGoogleSingIn = () => {
 
     if (!result.ok) return dispatch(logout(result.errorMessage!));
 
-    const authUserGoogle: AuthGoogle = {
+    const authUserGoogle: AuthUser = {
       displayName: result.displayName!,
       email: result.email!,
       photoURL: result.photoURL!,
@@ -25,5 +29,33 @@ export const startGoogleSingIn = () => {
     };
 
     dispatch(login(authUserGoogle));
+  };
+};
+
+export const startCreatingUserWithEmailPassword = ({
+  email,
+  password,
+  displayName,
+}: AuthRegister) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(checkingCredentials());
+
+    const { ok, uid, photoURL, errorMessage } =
+      await registerUserWithEmailPassword({
+        email,
+        password,
+        displayName,
+      });
+
+    if (!ok) return dispatch(logout(errorMessage!));
+
+    const authUser: AuthUser = {
+      displayName: displayName,
+      email: email,
+      photoURL: photoURL!,
+      uid: uid!,
+    };
+
+    dispatch(login(authUser));
   };
 };

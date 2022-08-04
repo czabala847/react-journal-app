@@ -13,5 +13,4 @@ export interface AuthState {
   errorMessage: string | null;
 }
 
-export interface AuthGoogle
-  extends Omit<AuthState, "status" | "errorMessage"> {}
+export interface AuthUser extends Omit<AuthState, "status" | "errorMessage"> {}

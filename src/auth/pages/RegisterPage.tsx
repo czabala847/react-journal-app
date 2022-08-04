@@ -1,30 +1,65 @@
-import React, { ChangeEvent } from "react";
-
+import React, { ChangeEvent, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-
 import { Grid, TextField, Typography, Button, Link } from "@mui/material";
-
 import { AuthLayout } from "../layout/AuthLayout";
-import { useForm } from "../../hooks";
+import { FormValidation, useForm } from "../../hooks/useForm";
+
+import {
+  AppDispatch,
+  startCreatingUserWithEmailPassword,
+  useAppDispatch,
+} from "../../store";
 
 const formData = {
-  displayName: "Carlos Zabala",
-  email: "carlos@example.com",
-  password: "12345",
+  displayName: "",
+  email: "",
+  password: "",
+};
+
+const validations: FormValidation = {
+  email: [
+    (value: string) => value.includes("@"),
+    "El correo debe de tener un @.",
+  ],
+  password: [
+    (value: string) => value.length >= 6,
+    "El password debe de tener más de 6 letras.",
+  ],
+  displayName: [
+    (value: string) => value.length >= 1,
+    "El nombre es obligatorio.",
+  ],
 };
 
 export const RegisterPage: React.FC = () => {
-  const { displayName, email, password, changeValueInput, stateForm } =
-    useForm(formData);
+  const [submit, setSubmit] = useState<boolean>(false);
+  const { changeValueInput, formValidation, isFormValid, stateForm } = useForm(
+    formData,
+    validations
+  );
+  const { displayName, email, password } = stateForm;
+  const { displayNameValid, emailValid, passwordValid } = formValidation;
+  const dispatch = useAppDispatch();
 
   const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(stateForm);
+    setSubmit(true);
+
+    if (!isFormValid) return;
+
+    dispatch(
+      startCreatingUserWithEmailPassword({
+        displayName,
+        email,
+        password,
+      }) as AppDispatch
+    );
   };
 
   return (
     <AuthLayout title="Crear cuenta">
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} autoComplete="off">
+        <h1>Form</h1>
         <Grid container>
           <Grid item xs={12} sx={{ marginBottom: 2 }}>
             <TextField
@@ -35,6 +70,8 @@ export const RegisterPage: React.FC = () => {
               name="displayName"
               value={displayName}
               onChange={changeValueInput}
+              error={!!displayNameValid && submit}
+              helperText={displayNameValid}
             />
           </Grid>
 
@@ -47,6 +84,8 @@ export const RegisterPage: React.FC = () => {
               name="email"
               value={email}
               onChange={changeValueInput}
+              error={!!emailValid && submit}
+              helperText={emailValid}
             />
           </Grid>
 
@@ -59,6 +98,8 @@ export const RegisterPage: React.FC = () => {
               name="password"
               value={password}
               onChange={changeValueInput}
+              error={!!passwordValid && submit}
+              helperText={passwordValid}
             />
           </Grid>
 

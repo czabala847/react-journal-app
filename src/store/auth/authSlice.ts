@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import { AuthGoogle, AuthState, AuthStatus } from "./auth.interfaces";
+import { AuthUser, AuthState, AuthStatus } from "./auth.interfaces";
 
 const initialState: AuthState = {
   status: AuthStatus.NOT_AUTH,
@@ -16,7 +16,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state: AuthState, action: PayloadAction<AuthGoogle>) => {
+    login: (state: AuthState, action: PayloadAction<AuthUser>) => {
       return (state = {
         ...action.payload,
         errorMessage: null,

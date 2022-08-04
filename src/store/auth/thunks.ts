@@ -1,6 +1,7 @@
 import { AppDispatch } from "../store";
 import {
   loginUserWithEmailPassword,
+  logoutFirebase,
   registerUserWithEmailPassword,
   singInWithGoogle,
 } from "../../firebase/providers";
@@ -81,5 +82,12 @@ export const startLoginWithEmailAndPassword = (
     };
 
     dispatch(login(authUser));
+  };
+};
+
+export const startLogout = () => {
+  return async (dispatch: AppDispatch) => {
+    await logoutFirebase();
+    dispatch(logout());
   };
 };

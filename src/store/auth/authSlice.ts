@@ -23,10 +23,10 @@ export const authSlice = createSlice({
         status: AuthStatus.AUTH,
       });
     },
-    logout: (state: AuthState, action: PayloadAction<string>) => {
+    logout: (state: AuthState, action: PayloadAction<string | undefined>) => {
       return (state = {
         ...initialState,
-        errorMessage: action.payload,
+        errorMessage: action.payload ? action.payload : null,
         status: AuthStatus.NOT_AUTH,
       });
     },

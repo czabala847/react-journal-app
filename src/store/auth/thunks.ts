@@ -1,5 +1,6 @@
 import { AppDispatch } from "../store";
 import {
+  loginUserWithEmailPassword,
   registerUserWithEmailPassword,
   singInWithGoogle,
 } from "../../firebase/providers";
@@ -51,6 +52,29 @@ export const startCreatingUserWithEmailPassword = ({
 
     const authUser: AuthUser = {
       displayName: displayName,
+      email: email,
+      photoURL: photoURL!,
+      uid: uid!,
+    };
+
+    dispatch(login(authUser));
+  };
+};
+
+export const startLoginWithEmailAndPassword = (
+  email: string,
+  password: string
+) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(checkingCredentials());
+
+    const { ok, uid, photoURL, errorMessage, displayName } =
+      await loginUserWithEmailPassword(email, password);
+
+    if (!ok) return dispatch(logout(errorMessage!));
+
+    const authUser: AuthUser = {
+      displayName: displayName!,
       email: email,
       photoURL: photoURL!,
       uid: uid!,

@@ -1,40 +1,43 @@
 import React, { ChangeEvent, useMemo } from "react";
 import { useSelector } from "react-redux";
-
 import { Link as RouterLink } from "react-router-dom";
-
-import { Grid, TextField, Typography, Button, Link } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Typography,
+  Button,
+  Link,
+  Alert,
+} from "@mui/material";
 import { Google } from "@mui/icons-material";
 
 import { useForm } from "../../hooks";
 import {
   AppDispatch,
-  checkingAuthentication,
   RootState,
   startGoogleSingIn,
+  startLoginWithEmailAndPassword,
   useAppDispatch,
 } from "../../store";
 
 import { AuthLayout } from "../layout/AuthLayout";
 
+const formInitial = {
+  email: "",
+  password: "",
+};
+
 export const LoginPage: React.FC = () => {
-  const { changeValueInput, stateForm } = useForm(
-    {
-      email: "carlos@example.com",
-      password: "123456",
-    },
-    {}
+  const { status, errorMessage } = useSelector(
+    (state: RootState) => state.auth
   );
-
-  const { email, password } = stateForm;
-
   const dispatch = useAppDispatch();
-
-  const { status } = useSelector((state: RootState) => state.auth);
+  const { changeValueInput, stateForm } = useForm(formInitial, {});
+  const { email, password } = stateForm;
 
   const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(checkingAuthentication(email, password) as AppDispatch);
+    dispatch(startLoginWithEmailAndPassword(email, password) as AppDispatch);
   };
 
   const onGoogleSingIn = () => {
@@ -72,6 +75,11 @@ export const LoginPage: React.FC = () => {
           </Grid>
 
           <Grid container spacing={2} sx={{ mb: 2 }}>
+            {errorMessage && (
+              <Grid item xs={12} sx={{ mb: 2 }}>
+                <Alert severity="error">{errorMessage}</Alert>
+              </Grid>
+            )}
             <Grid item xs={12} md={6}>
               <Button
                 type="submit"

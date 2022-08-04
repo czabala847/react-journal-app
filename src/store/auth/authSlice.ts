@@ -4,7 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { AuthUser, AuthState, AuthStatus } from "./auth.interfaces";
 
 const initialState: AuthState = {
-  status: AuthStatus.NOT_AUTH,
+  status: AuthStatus.CHECKING,
   uid: null,
   email: null,
   displayName: null,
@@ -24,7 +24,11 @@ export const authSlice = createSlice({
       });
     },
     logout: (state: AuthState, action: PayloadAction<string>) => {
-      return (state = { ...initialState, errorMessage: action.payload });
+      return (state = {
+        ...initialState,
+        errorMessage: action.payload,
+        status: AuthStatus.NOT_AUTH,
+      });
     },
     checkingCredentials: (state: AuthState) => {
       return (state = { ...initialState, status: AuthStatus.CHECKING });

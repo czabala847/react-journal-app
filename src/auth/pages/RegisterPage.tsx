@@ -1,14 +1,23 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useMemo, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Grid, TextField, Typography, Button, Link } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Typography,
+  Button,
+  Link,
+  Alert,
+} from "@mui/material";
 import { AuthLayout } from "../layout/AuthLayout";
 import { FormValidation, useForm } from "../../hooks/useForm";
 
 import {
   AppDispatch,
+  RootState,
   startCreatingUserWithEmailPassword,
   useAppDispatch,
 } from "../../store";
+import { useSelector } from "react-redux";
 
 const formData = {
   displayName: "",
@@ -41,6 +50,10 @@ export const RegisterPage: React.FC = () => {
   const { displayNameValid, emailValid, passwordValid } = formValidation;
   const dispatch = useAppDispatch();
 
+  const { status, errorMessage } = useSelector(
+    (state: RootState) => state.auth
+  );
+
   const onSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSubmit(true);
@@ -55,6 +68,8 @@ export const RegisterPage: React.FC = () => {
       }) as AppDispatch
     );
   };
+
+  const isChecking = useMemo(() => status === "Checking", [status]);
 
   return (
     <AuthLayout title="Crear cuenta">
@@ -104,8 +119,18 @@ export const RegisterPage: React.FC = () => {
           </Grid>
 
           <Grid container sx={{ mb: 2 }}>
+            {errorMessage && (
+              <Grid item xs={12} sx={{ mb: 2 }}>
+                <Alert severity="error">{errorMessage}</Alert>
+              </Grid>
+            )}
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={isChecking}
+              >
                 Crear cuenta
               </Button>
             </Grid>

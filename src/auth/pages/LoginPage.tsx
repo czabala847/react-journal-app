@@ -48,7 +48,11 @@ export const LoginPage: React.FC = () => {
 
   return (
     <AuthLayout title="Login">
-      <form autoComplete="off" onSubmit={onSubmit}>
+      <form
+        autoComplete="off"
+        onSubmit={onSubmit}
+        className="animate__animated animate__fadeIn animate__faster"
+      >
         <Grid container>
           <Grid item xs={12} sx={{ marginBottom: 2 }}>
             <TextField

@@ -73,7 +73,11 @@ export const RegisterPage: React.FC = () => {
 
   return (
     <AuthLayout title="Crear cuenta">
-      <form onSubmit={onSubmit} autoComplete="off">
+      <form
+        onSubmit={onSubmit}
+        autoComplete="off"
+        className="animate__animated animate__fadeIn animate__faster"
+      >
         <h1>Form</h1>
         <Grid container>
           <Grid item xs={12} sx={{ marginBottom: 2 }}>

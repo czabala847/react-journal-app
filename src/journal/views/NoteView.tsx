@@ -1,11 +1,28 @@
-import React from "react";
-
+import React, { useMemo } from "react";
 import { Grid, Typography, Button, TextField } from "@mui/material";
 import { SaveOutlined } from "@mui/icons-material";
-
 import { ImageGallery } from "../components";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { useForm } from "../../hooks";
 
 export const NoteView: React.FC = () => {
+  const { active: note } = useSelector((state: RootState) => state.journal);
+  const { stateForm, changeValueInput } = useForm(note as {});
+  const { title, body } = stateForm;
+
+  const newDate = useMemo(() => {
+    let date: Date;
+
+    if (note && note.date) {
+      date = new Date(note.date);
+    } else {
+      date = new Date();
+    }
+
+    return date.toUTCString();
+  }, [note?.date]);
+
   return (
     <Grid
       className="animate__animated animate__fadeIn animate__faster"
@@ -17,7 +34,7 @@ export const NoteView: React.FC = () => {
     >
       <Grid item>
         <Typography fontSize={39} fontWeight="light">
-          28 de Agosto, 2022
+          {newDate}
         </Typography>
       </Grid>
 
@@ -36,6 +53,9 @@ export const NoteView: React.FC = () => {
           placeholder="Ingrese un título"
           label="Título"
           sx={{ border: "none", mb: 1 }}
+          name="title"
+          value={title}
+          onChange={changeValueInput}
         />
 
         <TextField
@@ -45,6 +65,9 @@ export const NoteView: React.FC = () => {
           multiline
           placeholder="¿Qué sucedió en el día de hoy?"
           minRows={5}
+          name="body"
+          value={body}
+          onChange={changeValueInput}
         />
 
         <ImageGallery />

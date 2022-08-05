@@ -14,7 +14,7 @@ type FormCheckedValue = {
 
 export const useForm = (
   initialState: FormData,
-  validations: FormValidation
+  validations?: FormValidation
 ) => {
   const [stateForm, setStateForm] = useState<FormData>(initialState);
   const [formValidation, setFormValidation] = useState<FormCheckedValue>({});
@@ -22,6 +22,10 @@ export const useForm = (
   useEffect(() => {
     createValidators();
   }, [stateForm]);
+
+  useEffect(() => {
+    setStateForm(initialState);
+  }, [initialState]);
 
   const changeValueInput = ({
     target,

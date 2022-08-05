@@ -1,23 +1,12 @@
 import React from "react";
-import {
-  Box,
-  Divider,
-  Drawer,
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { TurnedInNotOutlined } from "@mui/icons-material";
+import { Box, Divider, Drawer, List, Toolbar, Typography } from "@mui/material";
 import { RootState } from "../../store";
 import { useSelector } from "react-redux";
+import { NavBarItem } from "./NavBarItem";
 
 export const SideBar: React.FC<{ drawerWidth: number }> = ({ drawerWidth }) => {
   const { displayName } = useSelector((state: RootState) => state.auth);
+  const { notes } = useSelector((state: RootState) => state.journal);
 
   return (
     <Box
@@ -41,18 +30,8 @@ export const SideBar: React.FC<{ drawerWidth: number }> = ({ drawerWidth }) => {
         <Divider />
 
         <List>
-          {["Enero", "Febrero", "Marzo", "Abril"].map((text) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <TurnedInNotOutlined />
-                </ListItemIcon>
-                <Grid container direction="column">
-                  <ListItemText primary={text} />
-                  <ListItemText secondary={"lorem......"} />
-                </Grid>
-              </ListItemButton>
-            </ListItem>
+          {notes.map((note) => (
+            <NavBarItem key={note.id} note={note} />
           ))}
         </List>
       </Drawer>

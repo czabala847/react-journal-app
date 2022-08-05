@@ -40,3 +40,14 @@ export const startLoadNotes = () => {
     }
   };
 };
+
+export const startSaveNote = (note: Note) => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+    const { uid } = getState().auth;
+
+    const noteToFirestore = note;
+    // delete noteToFirestore.id;
+
+    console.log(noteToFirestore);
+  };
+};

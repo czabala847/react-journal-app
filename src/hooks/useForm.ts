@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 export type FormData = {
-  [key: string]: string;
+  [key: string]: any;
 };
 
 export type FormValidation = {

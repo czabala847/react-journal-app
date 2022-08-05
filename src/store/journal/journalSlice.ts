@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { JournalState } from "./journal.interfaces";
+import { JournalState, Note } from "./journal.interfaces";
 
 const initialState: JournalState = {
-  isSaving: true,
+  isSaving: false,
   messageSaved: "",
   notes: [],
   active: null,
@@ -13,9 +13,19 @@ export const journalSlice = createSlice({
   name: "journal",
   initialState,
   reducers: {
-    addNewEmptyNote: (state, action: PayloadAction<unknown>) => {},
-    setActiveNote: (state, action: PayloadAction<unknown>) => {},
-    setNotes: (state, action: PayloadAction<unknown>) => {},
+    savingNote: (state) => {
+      state.isSaving = true;
+    },
+    addNewEmptyNote: (state, action: PayloadAction<Note>) => {
+      state.notes.push(action.payload);
+      state.isSaving = false;
+    },
+    setActiveNote: (state, action: PayloadAction<Note>) => {
+      state.active = action.payload;
+    },
+    setNotes: (state, action: PayloadAction<Note[]>) => {
+      state.notes = action.payload;
+    },
     setSaving: (state, action: PayloadAction<unknown>) => {},
     updateNote: (state, action: PayloadAction<unknown>) => {},
     deleteNoteById: (state, action: PayloadAction<unknown>) => {},
@@ -25,9 +35,10 @@ export const journalSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   addNewEmptyNote,
+  deleteNoteById,
+  savingNote,
   setActiveNote,
   setNotes,
   setSaving,
   updateNote,
-  deleteNoteById,
 } = journalSlice.actions;

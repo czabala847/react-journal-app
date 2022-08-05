@@ -1,7 +1,7 @@
 export interface JournalState {
   isSaving: boolean;
   messageSaved: string;
-  notes: unknown[];
+  notes: Note[];
   active: Note | null;
 }
 
@@ -12,3 +12,5 @@ export interface Note {
   date: number;
   imageUrls: string[];
 }
+
+export interface NoteDTOCreate extends Omit<Note, "id" | "imageUrls"> {}

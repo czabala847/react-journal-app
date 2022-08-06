@@ -12,11 +12,8 @@ type FormCheckedValue = {
   [key: string]: string | null;
 };
 
-export const useForm = (
-  initialState: FormData,
-  validations?: FormValidation
-) => {
-  const [stateForm, setStateForm] = useState<FormData>(initialState);
+export const useForm = <T>(initialState: T, validations?: FormValidation) => {
+  const [stateForm, setStateForm] = useState<T>(initialState);
   const [formValidation, setFormValidation] = useState<FormCheckedValue>({});
 
   useEffect(() => {
@@ -53,9 +50,8 @@ export const useForm = (
     for (const key in validations) {
       const [fn, messageError] = validations[key];
 
-      formCheckedValues[`${key}Valid`] = fn(stateForm[key])
-        ? null
-        : messageError;
+      const value = (stateForm as any)[key];
+      formCheckedValues[`${key}Valid`] = fn(value) ? null : messageError;
     }
 
     setFormValidation(formCheckedValues);

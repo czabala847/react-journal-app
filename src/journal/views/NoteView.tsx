@@ -11,7 +11,7 @@ export const NoteView: React.FC = () => {
   const { active: note } = useSelector((state: RootState) => state.journal);
   const dispatch = useAppDispatch();
 
-  const { stateForm, changeValueInput } = useForm(note as {});
+  const { stateForm, changeValueInput } = useForm<Note>(note!);
   const { title, body } = stateForm;
 
   const newDate = useMemo(() => {
@@ -31,18 +31,9 @@ export const NoteView: React.FC = () => {
   };
 
   useEffect(() => {
-    const { body, date, id, imageUrls, title } = stateForm;
-    // console.log({ body, date, id, imageUrls, title });
-
-    const updatedNote: Note = {
-      body,
-      date,
-      id,
-      imageUrls,
-      title,
-    };
-
-    // dispatch(setActiveNote({ body, date, id, imageUrls, title }));
+    if (note !== stateForm) {
+      dispatch(setActiveNote(stateForm));
+    }
   }, [stateForm]);
 
   return (

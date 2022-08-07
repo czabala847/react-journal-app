@@ -9,12 +9,13 @@ export const getNotesFirebase = async (uid: string) => {
   const notes: Note[] = [];
   docs.forEach((doc) => {
     let note = doc.data();
+
     notes.push({
       id: doc.id,
       title: note.title,
       body: note.body,
       date: note.date,
-      imageUrls: [],
+      imageUrls: note.imageUrls || [],
     });
   });
 

@@ -129,7 +129,7 @@ export const NoteView: React.FC = () => {
           onChange={changeValueInput}
         />
 
-        <ImageGallery />
+        <ImageGallery images={note?.imageUrls || []} />
       </Grid>
     </Grid>
   );

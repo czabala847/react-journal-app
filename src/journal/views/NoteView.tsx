@@ -6,9 +6,14 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../store";
 import { useForm } from "../../hooks";
 import { Note, setActiveNote, startSaveNote } from "../../store/journal";
+import Swal from "sweetalert2";
 
 export const NoteView: React.FC = () => {
-  const { active: note } = useSelector((state: RootState) => state.journal);
+  const {
+    active: note,
+    isSaving,
+    messageSaved,
+  } = useSelector((state: RootState) => state.journal);
   const dispatch = useAppDispatch();
 
   const { stateForm, changeValueInput } = useForm<Note>(note!);
@@ -36,6 +41,12 @@ export const NoteView: React.FC = () => {
     }
   }, [stateForm]);
 
+  useEffect(() => {
+    if (messageSaved.length > 0) {
+      Swal.fire("Guardado!", messageSaved, "success");
+    }
+  }, [messageSaved]);
+
   return (
     <Grid
       className="animate__animated animate__fadeIn animate__faster"
@@ -52,7 +63,12 @@ export const NoteView: React.FC = () => {
       </Grid>
 
       <Grid item>
-        <Button color="primary" sx={{ padding: 2 }} onClick={onSaveNote}>
+        <Button
+          color="primary"
+          sx={{ padding: 2 }}
+          onClick={onSaveNote}
+          disabled={isSaving}
+        >
           <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
           Guardar
         </Button>

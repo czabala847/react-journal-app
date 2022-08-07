@@ -49,7 +49,10 @@ export const journalSlice = createSlice({
     cleanNotesLogout: (state) => {
       return (state = initialState);
     },
-    deleteNoteById: (state, action: PayloadAction<unknown>) => {},
+    deleteNoteById: (state, action: PayloadAction<string>) => {
+      state.notes = state.notes.filter((note) => note.id !== action.payload);
+      state.active = null;
+    },
   },
 });
 

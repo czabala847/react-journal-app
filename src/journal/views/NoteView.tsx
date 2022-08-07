@@ -1,6 +1,10 @@
 import React, { ChangeEvent, useEffect, useMemo, useRef } from "react";
 import { Grid, Typography, Button, TextField, IconButton } from "@mui/material";
-import { SaveOutlined, UploadFileOutlined } from "@mui/icons-material";
+import {
+  DeleteOutline,
+  SaveOutlined,
+  UploadFileOutlined,
+} from "@mui/icons-material";
 import { ImageGallery } from "../components";
 import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "../../store";
@@ -8,6 +12,7 @@ import { useForm } from "../../hooks";
 import {
   Note,
   setActiveNote,
+  startDeletingNote,
   startSaveNote,
   startUploadFiles,
 } from "../../store/journal";
@@ -58,6 +63,10 @@ export const NoteView: React.FC = () => {
     if (target.files && target.files?.length > 0) {
       dispatch(startUploadFiles(target.files));
     }
+  };
+
+  const onDelete = () => {
+    dispatch(startDeletingNote());
   };
 
   return (
@@ -128,6 +137,13 @@ export const NoteView: React.FC = () => {
           value={body}
           onChange={changeValueInput}
         />
+
+        <Grid container justifyContent="end">
+          <Button onClick={onDelete} color="error" sx={{ mt: 2 }}>
+            <DeleteOutline />
+            Borrar
+          </Button>
+        </Grid>
 
         <ImageGallery images={note?.imageUrls || []} />
       </Grid>

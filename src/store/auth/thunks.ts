@@ -8,6 +8,7 @@ import {
 import { checkingCredentials, logout, login } from "./authSlice";
 import { AuthUser } from "./auth.interfaces";
 import { AuthRegister } from "../../auth/models/Auth.interfaces";
+import { cleanNotesLogout } from "../journal";
 
 export const checkingAuthentication = (email: string, password: string) => {
   return async (dispatch: AppDispatch) => {
@@ -88,6 +89,7 @@ export const startLoginWithEmailAndPassword = (
 export const startLogout = () => {
   return async (dispatch: AppDispatch) => {
     await logoutFirebase();
+    dispatch(cleanNotesLogout());
     dispatch(logout());
   };
 };

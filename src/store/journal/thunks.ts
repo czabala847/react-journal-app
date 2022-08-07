@@ -6,11 +6,13 @@ import {
   savingNote,
   setActiveNote,
   setNotes,
+  setPhotosToActiveNote,
   setSaving,
   updateNote,
 } from "./journalSlice";
 import { Note, NoteDTOCreate, NoteDTOUpdate } from "./journal.interfaces";
 import { getNotesFirebase } from "../../helpers/getNotesFirebase";
+import { uploadFileToCloud } from "../../helpers/uploadFileToCloud";
 
 export const startNewNote = () => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
@@ -64,5 +66,20 @@ export const startSaveNote = () => {
 
       dispatch(updateNote(note));
     }
+  };
+};
+
+export const startUploadFiles = (files: FileList) => {
+  return async (dispatch: AppDispatch) => {
+    dispatch(setSaving());
+
+    const fileUploadPromise = [];
+
+    for (const file of files) {
+      fileUploadPromise.push(uploadFileToCloud(file));
+    }
+
+    const urlsPhotos = await Promise.all(fileUploadPromise);
+    dispatch(setPhotosToActiveNote(urlsPhotos));
   };
 };

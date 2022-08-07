@@ -13,4 +13,5 @@ export interface Note {
   imageUrls: string[];
 }
 
-export interface NoteDTOCreate extends Omit<Note, "id" | "imageUrls"> {}
+export interface NoteDTOCreate extends Omit<Note, "id"> {}
+export interface NoteDTOUpdate extends Partial<Note> {}

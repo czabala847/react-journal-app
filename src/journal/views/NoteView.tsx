@@ -27,7 +27,7 @@ export const NoteView: React.FC = () => {
   }, [note?.date]);
 
   const onSaveNote = () => {
-    // dispatch(startSaveNote({ ...FormData }));
+    dispatch(startSaveNote());
   };
 
   useEffect(() => {

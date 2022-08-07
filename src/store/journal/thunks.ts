@@ -6,8 +6,10 @@ import {
   savingNote,
   setActiveNote,
   setNotes,
+  setSaving,
+  updateNote,
 } from "./journalSlice";
-import { Note, NoteDTOCreate } from "./journal.interfaces";
+import { Note, NoteDTOCreate, NoteDTOUpdate } from "./journal.interfaces";
 import { getNotesFirebase } from "../../helpers/getNotesFirebase";
 
 export const startNewNote = () => {
@@ -18,6 +20,7 @@ export const startNewNote = () => {
       title: "",
       body: "",
       date: new Date().getTime(),
+      imageUrls: [],
     };
 
     dispatch(savingNote());
@@ -41,13 +44,25 @@ export const startLoadNotes = () => {
   };
 };
 
-export const startSaveNote = (note: Note) => {
+export const startSaveNote = () => {
   return async (dispatch: AppDispatch, getState: () => RootState) => {
     const { uid } = getState().auth;
+    const { active: note } = getState().journal;
 
-    const noteToFirestore = note;
-    // delete noteToFirestore.id;
+    if (note) {
+      const noteToFirestore: NoteDTOUpdate = {
+        body: note.body,
+        date: note.date,
+        imageUrls: note.imageUrls,
+        title: note.title,
+      };
 
-    console.log(noteToFirestore);
+      dispatch(setSaving());
+
+      const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`);
+      await setDoc(docRef, noteToFirestore, { merge: true });
+
+      dispatch(updateNote(note));
+    }
   };
 };

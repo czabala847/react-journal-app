@@ -8,9 +8,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Note, setActiveNote } from "../../store/journal";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 export const NavBarItem: React.FC<{ note: Note }> = ({ note }) => {
+  const { active } = useSelector((state: RootState) => state.journal);
+
   const newTitle = useMemo(() => {
     return note.title.length > 17
       ? `${note.title.substring(0, 17)}...`
@@ -20,7 +23,9 @@ export const NavBarItem: React.FC<{ note: Note }> = ({ note }) => {
   const dispatch = useDispatch();
 
   const onActiveNote = () => {
-    dispatch(setActiveNote(note));
+    if (active !== note) {
+      dispatch(setActiveNote(note));
+    }
   };
 
   return (
